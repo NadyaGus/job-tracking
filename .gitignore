@@ -1,4 +1,6 @@
 HELP.md
+.gigaide/
+*.gigaide
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar

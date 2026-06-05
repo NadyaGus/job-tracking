@@ -25,7 +25,7 @@
 ./gradlew build
 ```
 
-Сборка без тестов:
+Сборка без тестов (если нету Docker или не настроены TestContainers):
 
 ```bash
 ./gradlew build -x test
