@@ -12,37 +12,51 @@
 
 ## Требования
 
+- Docker и Docker Compose (рекомендуется)
 - Java 17+
 - PostgreSQL 12+
 - Gradle 7.6+
-- Docker (для запуска интеграционных тестов)
 
-## Сборка проекта
+---
 
-Сборка в докер-контейнере
+## 🚀 Запуск через Docker (Рекомендуемый способ)
+
+Приложение и база данных полностью контейнеризированы. Сборка образов, автоматическое развертывание схемы и наполнение базы тестовыми данными выполняются одной командой из корня проекта:
+
 ```bash
 docker compose up --build -d
 ```
+*После запуска приложение будет доступно по адресу `http://localhost:8080`.*
+
+### Полезные команды для работы с контейнерами:
+* **Просмотр логов в реальном времени**: `docker compose logs -f app`
+* **Остановка всех сервисов**: `docker compose down`
+* **Остановка с полной очисткой базы данных**: `docker compose down -v`
+
+---
+
+## 🛠️ Локальная сборка и запуск (Без Docker)
+
+### Сборка проекта
 
 Сборка с тестами (требует запущенный Docker для интеграционных тестов):
-
 ```bash
 ./gradlew build
 ```
 
 Сборка без тестов:
-
 ```bash
 ./gradlew build -x test
 ```
 
-## Запуск приложения
+### Запуск приложения
 
-Запуск с веб-сервером и REST API:
-
+Запуск с веб-сервером и REST API из скомпилированного архива:
 ```bash
 java -jar build/libs/job-tracking-0.0.1-SNAPSHOT.jar
 ```
+
+---
 
 ## REST API endpoints
 
@@ -59,6 +73,8 @@ java -jar build/libs/job-tracking-0.0.1-SNAPSHOT.jar
 - `GET /stat/match?count=<n>` — пользователи по количеству совпадений
 - `GET /stat/top-skills?n=<n>` — топ навыков
 
+---
+
 ## Архитектура
 
 ### Слои приложения
@@ -67,6 +83,8 @@ java -jar build/libs/job-tracking-0.0.1-SNAPSHOT.jar
 - `repository` — слой доступа к данным (JdbcTemplate + PostgreSQL)
 - `service` — бизнес-логика и сервисы (включая ScheduledSuggester)
 - `web` — REST API контроллеры
+
+---
 
 ## Разработка
 
@@ -84,7 +102,3 @@ java -jar build/libs/job-tracking-0.0.1-SNAPSHOT.jar
 ```bash
 ./gradlew test
 ```
-
-## Лицензия
-
-MIT License
