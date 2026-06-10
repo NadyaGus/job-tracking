@@ -1,0 +1,29 @@
+services:
+  db:
+    image: dockerhub.timeweb.cloud/postgres:15-alpine
+    container_name: job_tracking_db
+    restart: always
+    environment:
+      POSTGRES_DB: jobtracking
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d jobtracking"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: job_tracking_app
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      # Передаем приложению правильный адрес базы внутри сети Docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/jobtracking
+    depends_on:
+      db:
+        condition: service_healthy
